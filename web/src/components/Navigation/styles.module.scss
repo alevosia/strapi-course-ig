@@ -1,0 +1,14 @@
+.navigation {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navLink {
+    text-decoration: none;
+}
+
+.activeLink {
+    text-decoration: underline;
+}
