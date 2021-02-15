@@ -43,3 +43,23 @@ export async function sendPost(formData) {
         return await response.json()
     }
 }
+
+export async function deletePost(postId) {
+    const response = await fetch(`${API_URL}/posts/${postId}`, {
+        method: 'delete',
+    })
+
+    return response.status === 200
+}
+
+export async function updatePost(postId, data) {
+    const response = await fetch(`${API_URL}/posts/${postId}`, {
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+
+    return response.status === 200
+}
