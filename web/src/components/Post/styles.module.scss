@@ -1,8 +1,9 @@
 .post {
-    margin-top: 20px;
+    max-width: 400px;
     padding: 20px;
-    border: 1px solid #eeeeee;
+    border: 1px solid teal;
     border-radius: 5px;
+    color: black;
 }
 
 .image {
@@ -11,14 +12,22 @@
     object-fit: contain;
     background-color: #121212;
     border-radius: 4px;
+    margin-bottom: 10px;
 }
 
 .description {
     font-size: 18px;
     font-weight: bold;
-    padding: 10px 0;
+    margin-bottom: 10px;
 }
 
-.likes {
+.metadata {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 14px;
+}
+
+.heart {
+    cursor: pointer;
 }

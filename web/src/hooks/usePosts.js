@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
-import { getPosts } from '../api/posts'
+import { getPosts } from '../api/post'
 
 export function usePosts() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        async function fetchPosts() {
+        ;(async function () {
             const posts = await getPosts()
             setPosts(posts)
-        }
-
-        fetchPosts()
+        })()
     }, [])
 
     return posts

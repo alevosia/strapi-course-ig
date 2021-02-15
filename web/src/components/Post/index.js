@@ -3,23 +3,48 @@ import { API_URL } from '../../constants'
 import styles from './styles.module.scss'
 
 function getImageUrl(post) {
-    return `${API_URL}${post.image?.url}`
+    if (!post || !post.image) {
+        return ''
+    }
+
+    return API_URL + post.image.url
+}
+
+const options = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
 }
 
 export const Post = ({ post }) => {
     if (!post) return null
 
-    const { description, likes } = post
+    const { description, likes, published_at } = post
 
     return (
         <div className={styles.post}>
-            <img
-                className={styles.image}
-                src={getImageUrl(post)}
-                alt={description}
-            />
+            {post.image ? (
+                <img
+                    className={styles.image}
+                    src={getImageUrl(post)}
+                    alt={description}
+                />
+            ) : null}
+
             <h4 className={styles.description}>{description}</h4>
-            <div className={styles.likes}>💖 {likes.toLocaleString()}</div>
+
+            <div className={styles.metadata}>
+                <div>
+                    <span className={styles.heart}>💖</span>{' '}
+                    {likes.toLocaleString()}
+                </div>
+
+                <div>
+                    {new Date(published_at).toLocaleString('en-US', options)}
+                </div>
+            </div>
         </div>
     )
 }

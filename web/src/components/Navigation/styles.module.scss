@@ -7,8 +7,10 @@
 
 .navLink {
     text-decoration: none;
+    color: teal;
 }
 
-.activeLink {
+.activeNavLink {
     text-decoration: underline;
+    font-weight: bold;
 }

@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "posts",
   "info": {
-    "name": "post"
+    "name": "post",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -14,18 +15,20 @@
       "model": "file",
       "via": "related",
       "allowedTypes": [
-        "images",
-        "files",
-        "videos"
+        "images"
       ],
       "plugin": "upload",
-      "required": false
+      "required": true
     },
     "description": {
-      "type": "richtext"
+      "type": "richtext",
+      "required": true
     },
     "likes": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0,
+      "required": true,
+      "min": 0
     },
     "author": {
       "plugin": "users-permissions",

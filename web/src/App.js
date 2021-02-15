@@ -2,6 +2,7 @@ import './App.scss'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { CreatePage, HomePage } from './pages'
 import { Navigation } from './components/Navigation'
+import { PostPage } from './pages/Post'
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/create" component={CreatePage} />
+                    <Route exact path="/:id" component={PostPage} />
                 </Switch>
             </BrowserRouter>
         </div>

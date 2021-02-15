@@ -9,7 +9,7 @@ export const Navigation = () => {
                 exact
                 to="/"
                 className={styles.navLink}
-                activeClassName={styles.activeLink}
+                activeClassName={styles.activeNavLink}
             >
                 Home
             </NavLink>
@@ -17,7 +17,7 @@ export const Navigation = () => {
                 exact
                 to="/create"
                 className={styles.navLink}
-                activeClassName={styles.activeLink}
+                activeClassName={styles.activeNavLink}
             >
                 Create
             </NavLink>
