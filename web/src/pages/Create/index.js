@@ -1,12 +1,20 @@
-import React, { useRef, useState } from 'react'
-import { sendPost } from '../../api/post'
+import React, { useEffect, useRef, useState } from 'react'
+import { createPost } from '../../api/post'
+import { useAuth } from '../../context/AuthContext'
 import styles from './styles.module.scss'
 
-export const CreatePage = () => {
+export const CreatePage = ({ history }) => {
     const [description, setDescription] = useState('')
     const [file, setFile] = useState(null)
     const [feedback, setFeedback] = useState({ isError: false, message: '' })
     const fileInputRef = useRef(null)
+    const { auth } = useAuth()
+
+    useEffect(() => {
+        if (!auth.user) {
+            history.push('/')
+        }
+    }, [auth, history])
 
     function resetForm() {
         fileInputRef.current.value = ''
@@ -29,7 +37,10 @@ export const CreatePage = () => {
         formData.append('data', JSON.stringify({ description }))
         formData.append('files.image', file)
 
-        const { statusCode, message } = await sendPost(formData)
+        const { statusCode, message } = await createPost({
+            formData,
+            token: auth.jwt,
+        })
 
         if (statusCode === 200) {
             resetForm()
@@ -43,6 +54,10 @@ export const CreatePage = () => {
                 message,
             })
         }
+    }
+
+    if (!auth.user) {
+        return null
     }
 
     return (

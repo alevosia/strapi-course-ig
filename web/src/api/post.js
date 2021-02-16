@@ -28,9 +28,12 @@ export async function getPosts() {
     return posts
 }
 
-export async function sendPost(formData) {
+export async function createPost({ formData, token }) {
     const response = await fetch(API_URL + '/posts', {
         method: 'post',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
         body: formData,
     })
 
@@ -44,21 +47,25 @@ export async function sendPost(formData) {
     }
 }
 
-export async function deletePost(postId) {
+export async function updatePost({ postId, data, token }) {
     const response = await fetch(`${API_URL}/posts/${postId}`, {
-        method: 'delete',
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
     })
 
     return response.status === 200
 }
 
-export async function updatePost(postId, data) {
+export async function deletePost({ postId, token }) {
     const response = await fetch(`${API_URL}/posts/${postId}`, {
-        method: 'put',
+        method: 'delete',
         headers: {
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
     })
 
     return response.status === 200

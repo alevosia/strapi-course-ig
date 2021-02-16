@@ -14,29 +14,57 @@ module.exports = {
      * @return {Object}
      */
     async create(ctx) {
-        let entity
-
-        if (ctx.is('multipart')) {
-            const userId = ctx.state.user.id
-            const { data, files } = parseMultipartData(ctx)
-
-            console.log({ data, files })
-
-            if (!data || !data.description) {
-                ctx.throw(400, 'Description is missing.')
-            }
-
-            if (!files || !files.image) {
-                ctx.throw(400, 'Image is missing.')
-            }
-
-            entity = await strapi.services.post.create(
-                { ...data, likes: 0, author: userId },
-                { files }
-            )
-        } else {
+        if (!ctx.is('multipart')) {
             ctx.throw(400, 'Request must be multipart.')
         }
+
+        const { data, files } = parseMultipartData(ctx)
+
+        if (!data || !data.description) {
+            ctx.throw(400, 'Description is missing.')
+        }
+
+        if (!files || !files.image) {
+            ctx.throw(400, 'Image is missing.')
+        }
+
+        const userId = ctx.state.user.id
+        const { description } = data
+
+        const entity = await strapi.services.post.create(
+            { author: userId, description, likes: 0 },
+            { files }
+        )
+
+        return sanitizeEntity(entity, { model: strapi.models.post })
+    },
+
+    /**
+     * Update a record.
+     *
+     * @return {Object}
+     */
+    async update(ctx) {
+        const { id } = ctx.params
+        const userId = ctx.state.user.id
+
+        if (!ctx.is('application/json')) {
+            ctx.throw(
+                400,
+                'Update request must be of content type application/json.'
+            )
+        }
+
+        const { description } = ctx.request.body
+
+        if (!description) {
+            ctx.throw(400, 'Description is missing.')
+        }
+
+        const entity = await strapi.services.post.update(
+            { id, author: userId },
+            { description }
+        )
 
         return sanitizeEntity(entity, { model: strapi.models.post })
     },
@@ -49,51 +77,8 @@ module.exports = {
     async delete(ctx) {
         const { id } = ctx.params
         const userId = ctx.state.user.id
-        const post = await strapi.services.post.findOne({ id })
 
-        if (!post) {
-            ctx.throw(404, 'Post not found.')
-        }
-
-        if (post.author && post.author.id !== userId) {
-            ctx.throw(403, 'That is not yours.')
-        }
-
-        const entity = await strapi.services.post.delete({ id })
-        return sanitizeEntity(entity, { model: strapi.models.post })
-    },
-
-    /**
-     * Update a record.
-     *
-     * @return {Object}
-     */
-    async update(ctx) {
-        const { id } = ctx.params
-        const userId = ctx.state.user.id
-        const post = await strapi.services.post.findOne({ id })
-
-        if (!post) {
-            ctx.throw(404, 'Post not found.')
-        }
-
-        if (post.author && post.author.id !== userId) {
-            ctx.throw(403, 'That is not yours.')
-        }
-
-        let entity
-
-        if (ctx.is('multipart')) {
-            ctx.throw(400, 'Update request must be json/application')
-        } else {
-            const { description } = ctx.request.body
-
-            if (!description) {
-                ctx.throw(400, 'Description is missing.')
-            }
-
-            entity = await strapi.services.post.update({ id }, { description })
-        }
+        const entity = await strapi.services.post.delete({ id, author: userId })
 
         return sanitizeEntity(entity, { model: strapi.models.post })
     },

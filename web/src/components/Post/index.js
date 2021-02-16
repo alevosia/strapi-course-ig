@@ -33,6 +33,8 @@ export const Post = ({ post }) => {
                 />
             ) : null}
 
+            {post.author ? <div>{post.author.username}</div> : null}
+
             <h4 className={styles.description}>{description}</h4>
 
             <div className={styles.metadata}>
