@@ -21,7 +21,7 @@ const options = {
 export const Post = ({ post }) => {
     if (!post) return null
 
-    const { description, likes, published_at } = post
+    const { description, published_at } = post
 
     return (
         <div className={styles.post}>
@@ -39,8 +39,7 @@ export const Post = ({ post }) => {
 
             <div className={styles.metadata}>
                 <div>
-                    <span className={styles.heart}>💖</span>{' '}
-                    {likes.toLocaleString()}
+                    <span className={styles.heart}>💖</span> 123
                 </div>
 
                 <div>

@@ -24,16 +24,14 @@
       "type": "richtext",
       "required": true
     },
-    "likes": {
-      "type": "integer",
-      "default": 0,
-      "required": true,
-      "min": 0
-    },
     "author": {
       "plugin": "users-permissions",
       "model": "user",
       "via": "posts"
+    },
+    "likes": {
+      "via": "post",
+      "collection": "like"
     }
   }
 }
