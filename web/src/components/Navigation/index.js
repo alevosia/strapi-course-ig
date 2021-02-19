@@ -22,7 +22,7 @@ export const Navigation = () => {
 
     return (
         <nav className={styles.navigation}>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/">{auth.user ? auth.user.username : 'Home'}</NavLink>
             {auth.user ? (
                 <>
                     <NavLink to="/create">Create</NavLink>

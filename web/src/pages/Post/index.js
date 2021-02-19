@@ -50,7 +50,7 @@ export const PostPage = ({ match, history }) => {
                 <p>Loading post...</p>
             ) : post ? (
                 <>
-                    <Post post={post} />
+                    <Post post={post} fetchPost={fetchPost} />
                     {auth.user && auth.user.id === post.author?.id ? (
                         <div>
                             {isEditing ? (

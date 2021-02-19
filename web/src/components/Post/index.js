@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { createLike, deleteLike } from '../../api/like'
 import { API_URL } from '../../constants'
+import { useAuth } from '../../context/AuthContext'
 import styles from './styles.module.scss'
 
 function getImageUrl(post) {
@@ -19,13 +21,31 @@ const options = {
 }
 
 export const Post = ({ post }) => {
-    if (!post) return null
+    const { id, description, author, image, published_at, likes } = post
 
-    const { description, published_at } = post
+    const { auth } = useAuth()
+    const [likesCount, setLikesCount] = useState(likes.length)
+    const [isLiked, setIsLiked] = useState(
+        auth.user ? likes.some((like) => like.user === auth.user.id) : false
+    )
+
+    async function likePost() {
+        setIsLiked(true)
+        setLikesCount((prev) => prev + 1)
+
+        await createLike({ postId: id, token: auth.jwt })
+    }
+
+    async function unlikePost() {
+        setIsLiked(false)
+        setLikesCount((prev) => prev - 1)
+
+        await deleteLike({ postId: id, token: auth.jwt })
+    }
 
     return (
         <div className={styles.post}>
-            {post.image ? (
+            {image ? (
                 <img
                     className={styles.image}
                     src={getImageUrl(post)}
@@ -33,13 +53,19 @@ export const Post = ({ post }) => {
                 />
             ) : null}
 
-            {post.author ? <div>{post.author.username}</div> : null}
+            {author ? <div>{author.username}</div> : null}
 
             <h4 className={styles.description}>{description}</h4>
 
             <div className={styles.metadata}>
                 <div>
-                    <span className={styles.heart}>💖</span> 123
+                    <span
+                        className={styles.heart}
+                        onClick={isLiked ? unlikePost : likePost}
+                    >
+                        {isLiked ? '💖' : '🖤'}
+                    </span>{' '}
+                    {likesCount}
                 </div>
 
                 <div>
