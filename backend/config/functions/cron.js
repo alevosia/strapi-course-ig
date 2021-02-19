@@ -19,7 +19,7 @@ module.exports = {
     //
     // }
 
-    '* 0 * * * *': async () => {
+    '0 0 * * * *': async () => {
         console.log('Email time!')
 
         const users = await strapi.plugins[
